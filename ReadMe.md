@@ -12,10 +12,14 @@ This is a simple Blazor Server application that displays a list of products from
 2.  **.Net Setup:**
     * Ensure you have .Net installed. If Not download it [here](https://dotnet.microsoft.com/en-us/download) and download the latest .Net SDK application.
 
-3.  **Open Terminal or Command Prompt:**
-    # Clone the project from GitHub
+3.  **Open Terminal or Command Prompt and run these commands:**
+
+    # Clone the project from GitHub 
     * **Using ssh** ``` git clone git@github.com:bhekumuzithabethe/OnTecAssessment.git``` 
     * **Using https** ``` git clone https://github.com/bhekumuzithabethe/OnTecAssessment.git``` 
+
+    * If you don't have git installed download the source code, unzip it and carry on with the commands
+
 
     # Navigate to the project folder
     ``` cd OnTecAssessment ``` 

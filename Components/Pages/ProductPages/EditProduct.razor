@@ -1,0 +1,79 @@
+@using OnTecAssessment.Components.Domain
+@using OnTecAssessment.Components.Service
+@inject ProductService ProductService
+@inject CategoryService CategoryService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Edit Product</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="form" Model="@model">
+            <MudTextField T="string" @bind-Value="model.Name" Label="Product Name" Required="true"
+                RequiredError="Product Name is required!" />
+
+            <MudTextField T="decimal" @bind-Value="model.Price" Label="Product Price" Required="true"
+                RequiredError="Product Price is required!" />
+            <MudSelect T="int" @bind-Value="model.CategoryId" Label="Select Category" Required="true">
+                @foreach (var category in Categories)
+                {
+                    <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Update</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; }
+
+    [Parameter] public UpdateProductConstract Product { get; set; }
+    [Parameter] public string Title { get; set; }
+
+    private IEnumerable<CategoryConstract> Categories = Enumerable.Empty<CategoryConstract>();
+    
+
+    private MudForm form;
+    private UpdateProductConstract model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+    protected override void OnInitialized()
+    {
+        model.Id = Product.Id;
+        model.Name = Product.Name;
+        model.Price = Product.Price;
+        model.CategoryId = Product.CategoryId;
+
+    }
+
+    private void Cancel() => Dialog.Cancel();
+
+    private async Task Submit()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            try
+            {
+                await ProductService.UpdateProductAsync(model);
+                Snackbar.Add("Product updated successfully", Severity.Success);
+                Dialog.Close(DialogResult.Ok(true));
+            }
+            catch (Exception)
+            {
+                Snackbar.Add("Error updating product", Severity.Error);
+            }
+        }
+    }
+}

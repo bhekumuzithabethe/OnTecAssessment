@@ -1,0 +1,63 @@
+@using OnTecAssessment.Components.Domain
+@using OnTecAssessment.Components.Service
+@inject CategoryService CategoryService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">Edit Category</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="form" Model="@model">
+            <MudTextField T="string" @bind-Value="model.Name" Label="Category Name" Required="true"
+                RequiredError="Name is required!" />
+
+            <MudTextField T="string" @bind-Value="model.Description" Label="Description" Required="true"
+                RequiredError="Description is required!" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Update</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance Dialog { get; set; }
+
+    [Parameter] public UpdateCategoryConstract Category { get; set; }
+    [Parameter] public string Title { get; set; }
+
+
+    private MudForm form;
+    private UpdateCategoryConstract model = new();
+
+    protected override void OnInitialized()
+    {
+        model.Id = Category.Id;
+        model.Name = Category.Name;
+        model.Description = Category.Description;
+    }
+
+    private void Cancel() => Dialog.Cancel();
+
+    private async Task Submit()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            try
+            {
+                await CategoryService.UpdateCategoryAsync(model);
+                Snackbar.Add("Category updated successfully", Severity.Success);
+                Dialog.Close(DialogResult.Ok(true));
+            }
+            catch (Exception)
+            {
+                Snackbar.Add("Error updating category", Severity.Error);
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+@using OnTecAssessment.Components.Domain
+@using OnTecAssessment.Components.Service
+@inject CategoryService CategoryService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Model="@CategoryModel" OnValidSubmit="HandleValidSubmit">
+            <MudTextField @bind-Value="CategoryModel.Name" Label="Category Name" Required="true" />
+            <MudTextField @bind-Value="CategoryModel.Description" Label="Description" Required="true" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
+        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private CreateCategoryConstract CategoryModel = new();
+    private MudForm form = default!;
+    private async Task Cancel()
+    {
+        MudDialog.Cancel();
+    }   
+    private async Task Submit(){
+        await form.Validate();
+        if (form.IsValid){
+            try
+            {
+                await CategoryService.CreateCategoryAsync(CategoryModel);
+                Snackbar.Add("Category created successfully!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+                
+            }
+            catch (Exception ex)
+            {
+                // Handle exception (e.g., show error message)
+                Snackbar.Add($"Error creating category: {ex.Message}", Severity.Error);
+            }
+        }
+    }
+    
+}

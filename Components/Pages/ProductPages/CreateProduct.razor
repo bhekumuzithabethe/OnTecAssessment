@@ -1,0 +1,63 @@
+@using OnTecAssessment.Components.Domain
+@using OnTecAssessment.Components.Service
+@inject ProductService ProductService
+@inject CategoryService CategoryService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Model="@ProductModel" OnValidSubmit="HandleValidSubmit">
+            <MudTextField @bind-Value="ProductModel.Name" Label="Product Name" Required="true" />
+            <MudTextField @bind-Value="ProductModel.Price" Label="Price" Required="true" />
+
+            <MudSelect T="int" @bind-Value="ProductModel.CategoryId" Label="Select Category" Required="true">
+                @foreach (var category in Categories)
+                {
+                    <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
+        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = default!;
+
+    private CreateProductConstract ProductModel = new();
+    private MudForm form = default!;
+    private IEnumerable<CategoryConstract> Categories = Enumerable.Empty<CategoryConstract>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await CategoryService.GetAllCategoriesAsync();
+    }
+
+    private async Task Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Submit()
+    {
+        await form.Validate();
+        if (form.IsValid)
+        {
+            try
+            {
+                await ProductService.CreateProductAsync(ProductModel);
+                Snackbar.Add("Product created successfully!", Severity.Success);
+                MudDialog.Close(DialogResult.Ok(true));
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"Error creating product: {ex.Message}", Severity.Error);
+            }
+        }
+    }
+}

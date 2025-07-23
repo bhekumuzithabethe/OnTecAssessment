@@ -31,9 +31,9 @@ This is a simple Blazor Server application that displays a list of products from
     # Run the Blazor Server app
     ``` dotnet run``` 
 
-## To view the application
+    # To view the application
 
-Visit http://localhost:5017 in your browser.
+    Visit http://localhost:5017 in your browser.
 
 ## What I Learned
 

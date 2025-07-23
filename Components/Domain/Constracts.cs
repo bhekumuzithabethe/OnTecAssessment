@@ -44,8 +44,6 @@ namespace OnTecAssessment.Components.Domain
         public decimal Price { get; set; }
         [Required]
         public int CategoryId { get; set; }
-        [Required]
-        public Category? Category { get; set; }
     }
     
     public class CategoryConstract

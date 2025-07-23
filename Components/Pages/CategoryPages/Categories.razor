@@ -10,7 +10,6 @@
     <MudPaper Elevation="3" Class="pa-6 ma-4">
         <MudGrid>
             <MudItem xs="12" Class="d-flex justify-space-between align-center">
-                <MudText Typo="Typo.h3" Color="Color.Primary" Class="mb-4">Category Directory</MudText>
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.PersonAdd"
                     Size="Size.Large" Class="ml-auto" OnClick="OpenCreateDialog">
                     New Category
@@ -54,9 +53,6 @@
 
                         </TemplateColumn>
                     </Columns>
-                    <PagerContent>
-                        <MudDataGridPager T="CategoryConstract" PageSizeOptions="new int[] { 10, 25, 50, 100 }" />
-                    </PagerContent>
                 </MudDataGrid>
             </MudItem>
         </MudGrid>

@@ -82,7 +82,6 @@ namespace OnTecAssessment.Components.Service
             existingProduct.Name = product.Name;
             existingProduct.Price = product.Price;
             existingProduct.CategoryId = product.CategoryId;
-            existingProduct.Category = product.Category;
             await _context.SaveChangesAsync();
         }
         public async Task DeleteProductAsync(int id)

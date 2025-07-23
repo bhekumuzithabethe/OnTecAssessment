@@ -19,17 +19,21 @@ This is a simple Blazor Server application that displays a list of products from
 
     # Navigate to the project folder
     ``` cd OnTecAssessment ``` 
+
     # Restore the Nuget packages
     ``` dotnet restore OnTecAssessment.csproj ```
 
+    # Install the dotnet-ef tool globally
+    ``` dotnet tool install --global dotnet-ef  ```
+
     # Apply EF Core migrations
-    ``` dotnet ef migration firstMigration ``` 
+    ``` dotnet ef migrationa add firstMigration ``` 
 
     # Update the database
     ``` dotnet ef database update ``` 
 
     # Build the application
-    ``` dotnet build ``` 
+    ``` dotnet build OnTecAssessment.csproj``` 
 
     # Run the Blazor Server app
     ``` dotnet run ``` 

@@ -17,19 +17,22 @@ This is a simple Blazor Server application that displays a list of products from
     * **Using ssh** ``` git clone git@github.com:bhekumuzithabethe/OnTecAssessment.git``` 
     * **Using https** ``` git clone https://github.com/bhekumuzithabethe/OnTecAssessment.git``` 
 
-    * ``` cd OnTecAssessment``` 
+    # Navigate to the project folder
+    ``` cd OnTecAssessment ``` 
+    # Restore the Nuget packages
+    ``` dotnet restore OnTecAssessment.csproj ```
 
     # Apply EF Core migrations
-    ``` dotnet ef migration firstMigration``` 
+    ``` dotnet ef migration firstMigration ``` 
 
     # Update the database
-    ``` dotnet ef database update``` 
+    ``` dotnet ef database update ``` 
 
     # Build the application
-    ``` dotnet build``` 
+    ``` dotnet build ``` 
 
     # Run the Blazor Server app
-    ``` dotnet run``` 
+    ``` dotnet run ``` 
 
     # To view the application
 

@@ -17,10 +17,9 @@
                 </MudButton>
             </MudItem>
 
-            <MudItem xs="12" Class="mb-4">
+            <MudItem xs="12" Class="mb-4 d-flex align-center gap-4">
                 <MudSelect T="int?" Label="Filter by Category"
                            @bind-Value="selectedCategoryId"
-                           Immediate="true"
                            Placeholder="Select category"
                            Dense="true"
                            Clearable="true">
@@ -30,6 +29,10 @@
                         <MudSelectItem T="int?" Value="@category.Id">@category.Name</MudSelectItem>
                     }
                 </MudSelect>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitCategoryFilter">
+                    Apply Filter
+                </MudButton>
             </MudItem>
 
             <MudItem xs="12">
@@ -80,7 +83,6 @@
 </MudContainer>
 
 @code {
-    private List<ProductConstract> _products = new();
     private List<ProductConstract> _filteredProducts = new();
     private List<CategoryConstract> _categories = new();
     private bool _loading = true;
@@ -90,35 +92,31 @@
     {
         _loading = true;
         _categories = (await CategoryService.GetAllCategoriesAsync()).ToList();
-        await LoadProducts();
+        _filteredProducts = (await ProductService.GetAllProductsAsync()).ToList();
         _loading = false;
     }
 
-    private async Task LoadProducts()
+    private async Task SubmitCategoryFilter()
     {
+        _loading = true;
+
         try
         {
-            _products = (await ProductService.GetAllProductsAsync()).ToList();
-            ApplyFilter();
+            if (selectedCategoryId is null)
+            {
+                _filteredProducts = (await ProductService.GetAllProductsAsync()).ToList();
+            }
+            else
+            {
+                _filteredProducts = (await ProductService.GetProductsByCategoryIdAsync(selectedCategoryId.Value)).ToList();
+            }
         }
         catch (Exception)
         {
-            Snackbar.Add("Failed to load products", Severity.Error);
+            Snackbar.Add("Failed to filter products", Severity.Error);
         }
-    }
 
-    private void ApplyFilter()
-    {
-        _filteredProducts = selectedCategoryId is null
-            ? _products
-            : _products.Where(p => p.CategoryId == selectedCategoryId).ToList();
-    }
-
-    private async Task OnCategoryChanged(int? newCategoryId)
-    {
-        selectedCategoryId = newCategoryId;
-        ApplyFilter();
-        await InvokeAsync(StateHasChanged); // Force UI to update
+        _loading = false;
     }
 
     private async Task OpenEditDialog(ProductConstract product)
@@ -142,7 +140,7 @@
 
         if (result is not null && !result.Canceled)
         {
-            await LoadProducts();
+            await SubmitCategoryFilter();
             Snackbar.Add("Product updated successfully", Severity.Success);
         }
     }
@@ -163,7 +161,7 @@
             try
             {
                 await ProductService.DeleteProductAsync(productId);
-                await LoadProducts();
+                await SubmitCategoryFilter();
                 Snackbar.Add("Product deleted successfully", Severity.Success);
             }
             catch (Exception)
@@ -180,7 +178,7 @@
 
         if (result is not null && !result.Canceled)
         {
-            await LoadProducts();
+            await SubmitCategoryFilter();
             Snackbar.Add("Product created successfully", Severity.Success);
         }
     }

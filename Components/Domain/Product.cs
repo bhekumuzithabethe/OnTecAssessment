@@ -9,7 +9,6 @@ namespace OnTecAssessment.Components.Domain
         [Required(ErrorMessage = "Product Name is required.")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Price is required.")]
         [Precision(18, 2)] 
         public decimal Price { get; set; }
         public byte[]? ProductImage { get; set; }

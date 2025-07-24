@@ -15,7 +15,7 @@
 
             <MudTextField @bind-Value="ProductModel.Name" Label="Product Name" Required="true" />
 
-            <MudNumericField @bind-Value="ProductModel.Price" Label="Price" Required="true" />
+            <MudNumericField @bind-Value="ProductModel.Price" Label="Price" Required="false" />
             <MudSelect T="int" @bind-Value="ProductModel.CategoryId" Label="Select Category" Required="true">
                 <MudSelectItem T="int" Value="0" Disabled="true">----- Select Category-----</MudSelectItem>
                 @foreach (var category in Categories)

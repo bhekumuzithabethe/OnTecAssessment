@@ -12,7 +12,7 @@
     <DialogContent>
         <MudForm @ref="form" Model="@model" OnValidSubmit="Submit">
             <MudTextField @bind-Value="model.Name" Label="Product Name" Required="true" />
-            <MudNumericField @bind-Value="model.Price" Label="Price" Required="true" />
+            <MudNumericField @bind-Value="model.Price" Label="Price" Required="false" />
             <MudSelect T="int" @bind-Value="model.CategoryId" Label="Category" Required="true">
                 @foreach (var category in Categories)
                 {

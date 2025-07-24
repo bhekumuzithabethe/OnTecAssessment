@@ -29,15 +29,15 @@ This is a simple Blazor Server application that displays a list of products from
 
     ## Install the dotnet-ef tool globally
     ``` dotnet tool install --global dotnet-ef  ```
+    
+    ## Build the application
+    ``` dotnet build OnTecAssessment.csproj``` 
 
     ## Apply EF Core migrations
     ``` dotnet ef migrations add firstMigration ``` 
 
     ## Update the database
     ``` dotnet ef database update ``` 
-
-    ## Build the application
-    ``` dotnet build OnTecAssessment.csproj``` 
 
     ## Run the Blazor Server app
     ``` dotnet run ``` 

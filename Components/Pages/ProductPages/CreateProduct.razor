@@ -4,26 +4,47 @@
 @inject CategoryService CategoryService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-
 <MudDialog>
+
+    <TitleContent>
+        <MudText Typo="Typo.h6">Add Product</MudText>
+    </TitleContent>
+
     <DialogContent>
         <MudForm @ref="form" Model="@ProductModel" OnValidSubmit="HandleValidSubmit">
-            <MudTextField @bind-Value="ProductModel.Name" Label="Product Name" Required="true" />
-            <MudTextField @bind-Value="ProductModel.Price" Label="Price" Required="true" />
 
+            <MudTextField @bind-Value="ProductModel.Name" Label="Product Name" Required="true" />
+
+            <MudNumericField @bind-Value="ProductModel.Price" Label="Price" Required="true" />
             <MudSelect T="int" @bind-Value="ProductModel.CategoryId" Label="Select Category" Required="true">
+                <MudSelectItem T="int" Value="0" Disabled="true">----- Select Category-----</MudSelectItem>
                 @foreach (var category in Categories)
                 {
-                    <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                    <MudSelectItem T="int" Value="@category.Id">@category.Name</MudSelectItem>
                 }
             </MudSelect>
 
+
+            <MudText Typo="Typo.body2" Class="mt-2 mb-1">Product Image</MudText>
+            <InputFile OnChange="HandleImageUpload" Accept=".jpeg,.jpg,.png" />
+
+            @if (!string.IsNullOrWhiteSpace(imagePreview))
+            {
+                <img src="@imagePreview" alt="Product Image" style="max-width: 150px; margin-top: 10px;" />
+            }
+            else
+            {
+                <MudText NoWrap="true">No image uploaded yet.</MudText>
+            }
+
+            <MudStack Class="mt-4" Direction="Row" Justify="Justify.FlexEnd" Spacing="2">
+                <MudButton OnClick="Cancel" Color="Color.Primary" Variant="Variant.Outlined">Cancel</MudButton>
+                <MudButton OnClick="Submit"  Color="Color.Primary" Variant="Variant.Filled">Add</MudButton>
+            </MudStack>
+
         </MudForm>
     </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel" Color="Color.Secondary">Cancel</MudButton>
-        <MudButton OnClick="Submit" Color="Color.Primary">Add</MudButton>
-    </DialogActions>
+
 </MudDialog>
 
 @code {
@@ -32,13 +53,14 @@
     private CreateProductConstract ProductModel = new();
     private MudForm form = default!;
     private IEnumerable<CategoryConstract> Categories = Enumerable.Empty<CategoryConstract>();
+    private string? imagePreview;
     
     protected override async Task OnInitializedAsync()
     {
         Categories = await CategoryService.GetAllCategoriesAsync();
     }
 
-    private async Task Cancel()
+    private void Cancel()
     {
         MudDialog.Cancel();
     }
@@ -59,5 +81,38 @@
                 Snackbar.Add($"Error creating product: {ex.Message}", Severity.Error);
             }
         }
+    }
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            if(file.Size < 15000000)
+            {
+                using var stream = new MemoryStream();
+                await file.OpenReadStream().CopyToAsync(stream);
+                byte[] imageByte = stream.ToArray();
+                imagePreview = $"data:image/png;base64,{Convert.ToBase64String(imageByte)}";
+                ProductModel.ProductImage = imageByte; 
+            }
+            else
+            {
+
+                Snackbar.Add("Image size must be less than 1.5MB.", Severity.Warning);
+                imagePreview = null; 
+                ProductModel.ProductImage = null;
+            }
+        }
+        else
+        {
+            Snackbar.Add("Please select a valid image file.", Severity.Warning);
+            imagePreview = null; 
+            ProductModel.ProductImage = null; 
+        }
+    }
+    private async Task HandleValidSubmit()
+    {
+        await Submit();
     }
 }

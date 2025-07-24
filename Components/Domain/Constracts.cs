@@ -20,6 +20,8 @@ namespace OnTecAssessment.Components.Domain
         [Required]
         public decimal Price { get; set; }
         [Required]
+        public byte[]? ProductImage { get; set; }
+
         public int CategoryId { get; set; }
         [Required]
         public Category? Category { get; set; }
@@ -43,6 +45,8 @@ namespace OnTecAssessment.Components.Domain
         [Required]
         public decimal Price { get; set; }
         [Required]
+        public byte[]? ProductImage { get; set; }
+
         public int CategoryId { get; set; }
     }
     
@@ -66,6 +70,8 @@ namespace OnTecAssessment.Components.Domain
         [Required]
         public int CategoryId { get; set; }
         [Required]
+        public byte[]? ProductImage { get; set; }
+
         public Category? Category { get; set; }
     }
 }

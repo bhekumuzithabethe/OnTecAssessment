@@ -28,7 +28,7 @@
                         <PropertyColumn Property="x => x.Name" Title="Category Name">
                             <CellTemplate>
                                 <MudStack Row="true" AlignItems="AlignItems.Center">
-                                    <MudAvatar Color="Color.Secondary" Size="Size.Medium">@(context.Item.Name[0])
+                                    <MudAvatar Color="Color.Primary" Size="Size.Medium">@(context.Item.Name[0])
                                     </MudAvatar>
                                     <MudText>@context.Item.Name</MudText>
                                 </MudStack>
@@ -38,16 +38,9 @@
                         <TemplateColumn Title="Actions" TextAlignment="TextAlignment.Right">
                             <CellTemplate>
                                 <MudStack Row="true" Spacing="0" Class="pa-2">
-                                    <div>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary"
-                                            Size="Size.Small" Class="mx-1"
-                                            OnClick="@(() => OpenEditDialog(context.Item))" />
-                                    </div>
-                                    <div>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error"
-                                            Size="Size.Small" Class="mx-1"
-                                            OnClick="@(() => OpenDeleteDialog(context.Item.Id))" />
-                                    </div>
+                                        <MudButton Variant="Variant.Filled" class="mx-2" Color="Color.Primary" OnClick="@(() => OpenEditDialog(context.Item))">Edit</MudButton>
+
+                                        <MudButton Variant="Variant.Filled" class="mx-2" Color="Color.Error" OnClick="@(() => OpenDeleteDialog(context.Item.Id))">DELETE</MudButton>
                                 </MudStack>
                             </CellTemplate>
 
@@ -83,7 +76,6 @@
         catch (Exception)
         {
             Snackbar.Add("Failed to load categories", Severity.Error);
-            // Consider logging the exception here
         }
         finally
         {

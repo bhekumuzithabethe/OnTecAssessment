@@ -10,8 +10,9 @@ namespace OnTecAssessment.Components.Domain
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Price is required.")]
-        [Precision(18, 2)] // 👈 Sets decimal precision at the property level
+        [Precision(18, 2)] 
         public decimal Price { get; set; }
+        public byte[]? ProductImage { get; set; }
 
         [Required(ErrorMessage = "Category is required.")]
         public int CategoryId { get; set; }

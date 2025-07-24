@@ -13,7 +13,16 @@
 
 <body>
     <Routes @rendermode="InteractiveServer" />
-    
+    <script>
+        function openBase64Image(base64Data) {
+            var newWindow = window.open();
+            if (newWindow) {
+                newWindow.document.write('<img src="' + base64Data + '" style="width:40%;">');
+                newWindow.document.title = "Full Image";
+            }
+        }
+    </script>
+
     <script src="_framework/blazor.web.js"></script>
     <script src=@Assets["_content/MudBlazor/MudBlazor.min.js"]></script>
 </body>

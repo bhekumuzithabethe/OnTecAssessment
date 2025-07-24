@@ -1,4 +1,4 @@
-# Product Display System - Blazor Server App
+# Blazor Database Application - Intern Assessment
 
 This is a simple Blazor Server application that displays a list of products from a SQL Server database, allows adding new products, editing and deleting existing ones.
 

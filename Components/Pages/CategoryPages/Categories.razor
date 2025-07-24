@@ -25,6 +25,7 @@
                 <MudDataGrid T="CategoryConstract" Items="@_categories" Loading="@_loading" Hover="true" Dense="false"
                     Striped="false" Bordered="false" ReadOnly="true" Class="elevation-1">
                     <Columns>
+                        <PropertyColumn Property="x => x.Id" Title="ID" />
                         <PropertyColumn Property="x => x.Name" Title="Category Name">
                             <CellTemplate>
                                 <MudStack Row="true" AlignItems="AlignItems.Center">
